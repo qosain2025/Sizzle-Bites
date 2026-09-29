@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sizzle Bites | Online Ordering</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config for Custom Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandMaroon: '#800000',
+                        brandYellow: '#FFD700',
+                        darkBg: '#121212',
+                        darkCard: '#1E1E1E',
+                        lightBg: '#F3F4F6',
+                        lightCard: '#FFFFFF'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbars for a polished look */
+        ::-webkit-scrollbar { width: 6px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #800000; border-radius: 4px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Smooth transitions */
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        .drawer-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .modal-transition { transition: opacity 0.2s ease, transform 0.2s ease; }
+    </style>
+</head>
+
+<body class="bg-lightBg text-gray-900 dark:bg-darkBg dark:text-gray-100 font-sans min-h-screen pb-20">
+
+    <!-- Top Info Bar -->
+    <div class="bg-brandMaroon text-white text-xs py-1.5 px-4 flex justify-between items-center z-50 relative">
+        <div class="flex gap-3 items-center">
+            <span class="hidden sm:inline"><i class="fa-solid fa-location-dot text-brandYellow"></i> Main New City Gate Chakswari</span>
+            <a href="tel:03457482983" class="hover:text-brandYellow transition"><i class="fa-solid fa-phone"></i> 0345-7482983</a>
+        </div>
+        <div class="font-bold tracking-wide">
+            <i class="fa-solid fa-motorcycle text-brandYellow"></i> FAST DELIVERY
+        </div>
+    </div>
+
+    <!-- Main Header (Sticky) -->
+    <header class="sticky top-0 z-40 bg-lightCard dark:bg-darkCard shadow-md transition-colors duration-300">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-brandMaroon flex items-center justify-center text-brandYellow border-2 border-brandYellow shadow-lg">
+                    <i class="fa-solid fa-fire text-xl"></i>
+                </div>
+                <div class="leading-tight">
+                    <h1 class="text-xl font-extrabold italic tracking-tight text-brandMaroon dark:text-brandYellow">Sizzle Bites</h1>
+                    <p class="text-[10px] uppercase font-semibold text-gray-500 dark:text-gray-400">Dine In & Take Away</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                
+                <!-- Cart Button -->
+                <button onclick="toggleCart()" class="relative bg-brandMaroon hover:bg-red-900 text-white px-4 py-2 rounded-full font-bold text-sm shadow flex items-center gap-2 transition transform active:scale-95">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-brandYellow text-brandMaroon text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white dark:border-darkCard">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Horizontal Categories Menu -->
+        <div class="max-w-5xl mx-auto px-4 py-2 border-t border-gray-200 dark:border-gray-800">
+            <div class="flex overflow-x-auto no-scrollbar gap-2 pb-1" id="categoryNav">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-brandMaroon to-red-800 rounded-2xl p-6 mb-8 text-white shadow-xl relative overflow-hidden flex items-center justify-between">
+            <div class="relative z-10">
+                <h2 class="text-2xl sm:text-3xl font-black mb-1 text-brandYellow drop-shadow-md">Craving Something Hot?</h2>
+                <p class="text-sm sm:text-base opacity-90 max-w-md">Order the finest pizzas, burgers, and deals in Chakswari right to your doorstep or table.</p>
+            </div>
+            <i class="fa-solid fa-pizza-slice text-8xl absolute -right-4 -bottom-4 opacity-20 transform -rotate-12"></i>
+        </div>
+
+        <!-- Menu Container -->
+        <div id="menuContainer" class="space-y-10">
+            <!-- Dynamically populated categories and items -->
+        </div>
+
+        <!-- Location / Map Section -->
+        <div class="mt-12 bg-lightCard dark:bg-darkCard rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+            <h3 class="text-lg font-bold text-brandMaroon dark:text-brandYellow mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot"></i> Find Us
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Main New City Gate Chakswari AJ&K</p>
+            <div class="w-full h-64 rounded-xl overflow-hidden shadow-inner">
+                <iframe 
+                    src="https://maps.google.com/maps?q=33.25822662535128,73.7878333486755&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    aria-hidden="false" 
+                    tabindex="0">
+                </iframe>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-darkCard border-t border-gray-200 dark:border-gray-800 mt-8 py-6 text-center">
+        <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">© 2026 Sizzle Bites. All rights reserved.</p>
+    </footer>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden modal-transition opacity-0" onclick="toggleCart()"></div>
+    
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-lightBg dark:bg-darkBg z-50 drawer-transition translate-x-full shadow-2xl flex flex-col border-l border-gray-200 dark:border-gray-800">
+        
+        <div class="bg-lightCard dark:bg-darkCard p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center shadow-sm z-10">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-basket-shopping text-brandMaroon dark:text-brandYellow"></i> Your Order
+            </h2>
+            <button onclick="toggleCart()" class="w-8 h-8 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-red-100 hover:text-brandMaroon transition">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-3">
+            <!-- Cart items injected here -->
+            <div class="h-full flex flex-col items-center justify-center text-gray-400 space-y-3">
+                <i class="fa-solid fa-cart-arrow-down text-5xl opacity-50"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+
+        <div class="bg-lightCard dark:bg-darkCard border-t border-gray-200 dark:border-gray-800 p-4 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+            <div class="flex justify-between items-center mb-4 text-gray-900 dark:text-white">
+                <span class="font-semibold">Subtotal</span>
+                <span id="cartTotalDisplay" class="font-black text-xl text-brandMaroon dark:text-brandYellow">Rs. 0</span>
+            </div>
+            <button onclick="openCheckout()" id="checkoutBtn" class="w-full bg-brandMaroon hover:bg-red-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Item Selection Modal -->
+    <div id="itemModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] hidden modal-transition opacity-0 flex items-end sm:items-center justify-center sm:p-4">
+        <div class="bg-lightCard dark:bg-darkCard w-full sm:w-[450px] sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="relative h-48 sm:h-56 bg-gray-200 dark:bg-gray-800">
+                <img id="modalImg" src="" alt="Food" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <button onclick="closeItemModal()" class="absolute top-3 right-3 w-8 h-8 bg-black/50 backdrop-blur text-white rounded-full flex items-center justify-center hover:bg-brandMaroon transition">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <h3 id="modalTitle" class="text-2xl font-black text-white leading-tight">Item Name</h3>
+                    <p id="modalDesc" class="text-gray-300 text-xs mt-1 line-clamp-2">Description</p>
+                </div>
+            </div>
+            
+            <div class="p-4 sm:p-5 overflow-y-auto flex-1">
+                <div id="modalVariantsContainer" class="space-y-3 mb-5">
+                    <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-2 uppercase tracking-wide">Select Option</h4>
+                    <div id="modalVariantOptions" class="space-y-2">
+                        <!-- Radio buttons injected here -->
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-4">
+                    <span class="font-semibold text-gray-700 dark:text-gray-300">Quantity</span>
+                    <div class="flex items-center gap-3 bg-gray-100 dark:bg-darkBg rounded-lg p-1 border border-gray-200 dark:border-gray-700">
+                        <button onclick="adjustModalQty(-1)" class="w-8 h-8 rounded-md bg-white dark:bg-gray-800 text-brandMaroon dark:text-brandYellow shadow-sm flex justify-center items-center hover:bg-gray-50 transition"><i class="fa-solid fa-minus"></i></button>
+                        <span id="modalQty" class="font-bold w-6 text-center text-gray-900 dark:text-white">1</span>
+                        <button onclick="adjustModalQty(1)" class="w-8 h-8 rounded-md bg-white dark:bg-gray-800 text-brandMaroon dark:text-brandYellow shadow-sm flex justify-center items-center hover:bg-gray-50 transition"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center gap-4">
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-500">Total Price</span>
+                    <span id="modalPriceTotal" class="text-xl font-black text-brandMaroon dark:text-brandYellow">Rs. 0</span>
+                </div>
+                <button onclick="confirmAddToCart()" class="flex-1 bg-brandMaroon hover:bg-red-800 text-white font-bold py-3 rounded-xl shadow transition flex items-center justify-center gap-2 active:scale-95">
+                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal (WhatsApp Format) -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[70] hidden modal-transition opacity-0 flex items-center justify-center p-4">
+        <div class="bg-lightCard dark:bg-darkCard w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-brandMaroon/30">
+            <div class="bg-brandMaroon p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-brands fa-whatsapp text-brandYellow text-xl"></i> Complete Order</h3>
+                <button onclick="closeCheckout()" class="hover:text-brandYellow transition"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            
+            <form id="checkoutForm" onsubmit="submitWhatsAppOrder(event)" class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Order Type *</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="orderType" value="Home Delivery" checked class="peer sr-only" onchange="toggleAddressField()">
+                            <div class="text-center text-xs font-semibold p-2 rounded-lg border border-gray-300 dark:border-gray-700 peer-checked:bg-brandMaroon peer-checked:text-white peer-checked:border-brandMaroon transition">Delivery</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="orderType" value="Take Away" class="peer sr-only" onchange="toggleAddressField()">
+                            <div class="text-center text-xs font-semibold p-2 rounded-lg border border-gray-300 dark:border-gray-700 peer-checked:bg-brandMaroon peer-checked:text-white peer-checked:border-brandMaroon transition">Take Away</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="orderType" value="Dine In" class="peer sr-only" onchange="toggleAddressField()">
+                            <div class="text-center text-xs font-semibold p-2 rounded-lg border border-gray-300 dark:border-gray-700 peer-checked:bg-brandMaroon peer-checked:text-white peer-checked:border-brandMaroon transition">Dine In</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
+                    <input type="text" id="custName" required class="w-full bg-gray-50 dark:bg-darkBg border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brandMaroon dark:focus:border-brandYellow text-gray-900 dark:text-white transition">
+                </div>
+
+                <div id="addressContainer">
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Delivery Address *</label>
+                    <textarea id="custAddress" rows="2" required placeholder="House, Street, Chakswari Area..." class="w-full bg-gray-50 dark:bg-darkBg border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brandMaroon dark:focus:border-brandYellow text-gray-900 dark:text-white transition"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Order Notes (Optional)</label>
+                    <input type="text" id="custNotes" placeholder="e.g. Extra spicy, extra ketchup..." class="w-full bg-gray-50 dark:bg-darkBg border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brandMaroon dark:focus:border-brandYellow text-gray-900 dark:text-white transition">
+                </div>
+
+                <button type="submit" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3.5 rounded-xl shadow-lg transition mt-4 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Send via WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Data Structure ---
+        const menuData = [
+            {
+                category: "Special Deals",
+                icon: "fa-fire",
+                items: [
+                    { id: 'd1', name: "1 Person Deal", desc: "Zinger Burger, Fries, 300ml Drink", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", price: 600 },
+                    { id: 'd2', name: "Kids Meal", desc: "Chicken Burger, Fries + Nuggets, 1 Juice", image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=500&q=80", price: 599 },
+                    { id: 'd3', name: "2 Person Deal", desc: "2 Zinger Burgers, 2 Fries, 300ml Drink", image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", price: 1199 },
+                    { id: 'd4', name: "Hot Deal", desc: "Small Pizza, Maxicano Hot Burger, 300ml Drink", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80", price: 999 },
+                    { id: 'd5', name: "Birthday Deal", desc: "Large Pizza, 2 Medium Pizza, 12pcs Wings, 2 Large Fries, 2ltr Drink", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80", price: 5500 }
+                ]
+            },
+            {
+                category: "Pizzas",
+                icon: "fa-pizza-slice",
+                items: [
+                    { id: 'p1', name: "Sizzle Special Pizza", desc: "Special marinated chicken, mushrooms, olives, bell peppers, extra cheese.", image: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 649, 'Medium': 1199, 'Large': 1699, 'XL': 2299 } },
+                    { id: 'p2', name: "Chicken Tikka Pizza", desc: "Spicy chicken tikka chunks with onions and green peppers.", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 599, 'Medium': 1099, 'Large': 1549, 'XL': 2050 } },
+                    { id: 'p3', name: "Margherita Pizza", desc: "Classic rich tomato sauce, premium mozzarella, and herbs.", image: "https://images.unsplash.com/photo-1571407971119-f0b1a03f46f4?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 500, 'Medium': 999, 'Large': 1399, 'XL': 1799 } }
+                ]
+            },
+            {
+                category: "Burgers",
+                icon: "fa-hamburger",
+                items: [
+                    { id: 'b1', name: "Zinger Burger", desc: "Crispy fried chicken breast, fresh lettuce, and signature mayo.", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 450, 'Meal (+Fries & Drink)': 650 } },
+                    { id: 'b2', name: "Double Decker", desc: "Double patty, melting cheese, special sauce.", image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 599, 'Meal (+Fries & Drink)': 799 } },
+                    { id: 'b3', name: "Grilled Burger", desc: "Flame-grilled succulent chicken with BBQ glaze.", image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 499, 'Meal (+Fries & Drink)': 699 } }
+                ]
+            },
+            {
+                category: "Wraps & Sides",
+                icon: "fa-drumstick-bite",
+                items: [
+                    { id: 'w1', name: "Crispy Wrap", desc: "Crispy chicken strips, lettuce, and mayo wrapped in a soft tortilla.", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=80", price: 399 },
+                    { id: 's1', name: "Loaded Fries", desc: "Golden fries topped with chicken chunks, cheese, and spicy mayo.", image: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?auto=format&fit=crop&w=500&q=80", price: 599 },
+                    { id: 's2', name: "Fried Wings (6 Pcs)", desc: "Crispy, golden, and juicy fried chicken wings.", image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=500&q=80", price: 450 }
+                ]
+            }
+        ];
+
+        // --- 2. State Variables ---
+        let cart = [];
+        let activeModalItem = null;
+        let activeVariantName = null;
+        let activeModalQty = 1;
+
+        // --- 3. Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderCategoryNav();
+            renderMenu();
+        });
+
+        // --- 4. UI Rendering Functions ---
+        function renderCategoryNav() {
+            const nav = document.getElementById('categoryNav');
+            nav.innerHTML = menuData.map(cat => `
+                <a href="#cat-${cat.category.replace(/\s+/g, '')}" class="whitespace-nowrap px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold text-sm hover:bg-brandMaroon hover:text-white dark:hover:bg-brandYellow dark:hover:text-black transition flex items-center gap-2">
+                    <i class="fa-solid ${cat.icon}"></i> ${cat.category}
+                </a>
+            `).join('');
+        }
+
+        function renderMenu() {
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = menuData.map(cat => `
+                <section id="cat-${cat.category.replace(/\s+/g, '')}" class="pt-4 scroll-mt-24">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b-2 border-brandMaroon inline-block pb-1">${cat.category}</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${cat.items.map(item => {
+                            const priceDisplay = item.variants 
+                                ? `From Rs. ${Object.values(item.variants)[0]}`
+                                : `Rs. ${item.price}`;
+                            return `
+                            <div class="bg-lightCard dark:bg-darkCard rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-800 hover:shadow-md transition flex group">
+                                <div class="w-1/3 relative overflow-hidden">
+                                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                </div>
+                                <div class="w-2/3 p-3 flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-sm leading-tight">${item.name}</h3>
+                                        <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">${item.desc}</p>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                                        <span class="font-black text-brandMaroon dark:text-brandYellow text-sm">${priceDisplay}</span>
+                                        <button onclick='openItemModal(${JSON.stringify(item)})' class="w-8 h-8 rounded-full bg-brandMaroon text-white flex items-center justify-center hover:bg-red-800 transition shadow">
+                                            <i class="fa-solid fa-plus text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </section>
+            `).join('');
+        }
+
+        // --- 5. Modal Logic ---
+        function openItemModal(item) {
+            activeModalItem = item;
+            activeModalQty = 1;
+            
+            document.getElementById('modalImg').src = item.image;
+            document.getElementById('modalTitle').innerText = item.name;
+            document.getElementById('modalDesc').innerText = item.desc;
+            document.getElementById('modalQty').innerText = activeModalQty;
+
+            const variantsContainer = document.getElementById('modalVariantsContainer');
+            const optionsDiv = document.getElementById('modalVariantOptions');
+            
+            if (item.variants) {
+                variantsContainer.classList.remove('hidden');
+                const keys = Object.keys(item.variants);
+                activeVariantName = keys[0]; // Default select first
+                
+                optionsDiv.innerHTML = keys.map((key, idx) => `
+                    <label class="flex justify-between items-center p-3 rounded-lg border cursor-pointer transition ${idx === 0 ? 'border-brandMaroon bg-red-50 dark:bg-brandMaroon/20 dark:border-brandYellow' : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'}" id="label-${idx}">
+                        <div class="flex items-center gap-3">
+                            <input type="radio" name="variant" value="${key}" ${idx === 0 ? 'checked' : ''} onchange="selectVariant('${key}', ${idx}, ${keys.length})" class="accent-brandMaroon w-4 h-4">
+                            <span class="font-medium text-sm text-gray-800 dark:text-gray-200">${key}</span>
+                        </div>
+                        <span class="font-bold text-brandMaroon dark:text-brandYellow text-sm">Rs. ${item.variants[key]}</span>
+                    </label>
+                `).join('');
+            } else {
+                variantsContainer.classList.add('hidden');
+                activeVariantName = null;
+            }
+
+            updateModalPrice();
+            
+            const modal = document.getElementById('itemModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+        }
+
+        function selectVariant(key, selectedIdx, totalOpts) {
+            activeVariantName = key;
+            // UI update for labels
+            for(let i=0; i<totalOpts; i++){
+                const label = document.getElementById(`label-${i}`);
+                if(i === selectedIdx) {
+                    label.classList.add('border-brandMaroon', 'bg-red-50', 'dark:bg-brandMaroon/20', 'dark:border-brandYellow');
+                    label.classList.remove('border-gray-200', 'dark:border-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-800');
+                } else {
+                    label.classList.remove('border-brandMaroon', 'bg-red-50', 'dark:bg-brandMaroon/20', 'dark:border-brandYellow');
+                    label.classList.add('border-gray-200', 'dark:border-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-800');
+                }
+            }
+            updateModalPrice();
+        }
+
+        function adjustModalQty(change) {
+            if (activeModalQty + change >= 1) {
+                activeModalQty += change;
+                document.getElementById('modalQty').innerText = activeModalQty;
+                updateModalPrice();
+            }
+        }
+
+        function updateModalPrice() {
+            let unitPrice = activeModalItem.variants ? activeModalItem.variants[activeVariantName] : activeModalItem.price;
+            document.getElementById('modalPriceTotal').innerText = `Rs. ${unitPrice * activeModalQty}`;
+        }
+
+        function closeItemModal() {
+            const modal = document.getElementById('itemModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+
+        // --- 6. Cart Logic ---
+        function confirmAddToCart() {
+            let unitPrice = activeModalItem.variants ? activeModalItem.variants[activeVariantName] : activeModalItem.price;
+            let cartId = activeModalItem.id + (activeVariantName ? '-' + activeVariantName : '');
+            
+            let existingItem = cart.find(i => i.cartId === cartId);
+            if (existingItem) {
+                existingItem.qty += activeModalQty;
+            } else {
+                cart.push({
+                    cartId: cartId,
+                    name: activeModalItem.name,
+                    variant: activeVariantName,
+                    price: unitPrice,
+                    qty: activeModalQty
+                });
+            }
+            
+            updateCartUI();
+            closeItemModal();
+            
+            // Pop open cart to show it was added
+            if(document.getElementById('cartDrawer').classList.contains('translate-x-full')){
+                toggleCart();
+            }
+        }
+
+        function updateCartUI() {
+            const countBadge = document.getElementById('cartCountBadge');
+            const list = document.getElementById('cartItemsList');
+            const totalDisplay = document.getElementById('cartTotalDisplay');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            
+            let totalQty = 0;
+            let totalPrice = 0;
+            
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-gray-400 space-y-3 mt-10">
+                        <i class="fa-solid fa-basket-shopping text-5xl opacity-30"></i>
+                        <p class="text-sm font-medium">Your cart is hungry!</p>
+                    </div>`;
+                countBadge.innerText = "0";
+                totalDisplay.innerText = "Rs. 0";
+                checkoutBtn.disabled = true;
+                return;
+            }
+            
+            let html = '';
+            cart.forEach((item, index) => {
+                totalQty += item.qty;
+                let itemTotal = item.price * item.qty;
+                totalPrice += itemTotal;
+                
+                html += `
+                <div class="bg-white dark:bg-darkCard p-3 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col gap-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white leading-tight">${item.name}</h4>
+                            ${item.variant ? `<p class="text-xs text-brandMaroon dark:text-brandYellow font-medium mt-0.5">${item.variant}</p>` : ''}
+                        </div>
+                        <span class="font-black text-sm text-gray-900 dark:text-white">Rs. ${itemTotal}</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <button onclick="removeFromCart(${index})" class="text-[10px] text-gray-400 hover:text-red-500 transition underline">Remove</button>
+                        <div class="flex items-center gap-2 bg-gray-100 dark:bg-darkBg rounded p-1">
+                            <button onclick="changeCartQty(${index}, -1)" class="w-6 h-6 rounded bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-sm flex items-center justify-center text-xs hover:bg-gray-50 transition"><i class="fa-solid fa-minus"></i></button>
+                            <span class="font-bold text-xs w-4 text-center dark:text-white">${item.qty}</span>
+                            <button onclick="changeCartQty(${index}, 1)" class="w-6 h-6 rounded bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-sm flex items-center justify-center text-xs hover:bg-gray-50 transition"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            list.innerHTML = html;
+            countBadge.innerText = totalQty;
+            totalDisplay.innerText = `Rs. ${totalPrice}`;
+            checkoutBtn.disabled = false;
+        }
+
+        function changeCartQty(index, change) {
+            if (cart[index].qty + change >= 1) {
+                cart[index].qty += change;
+            } else {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+            
+            if (drawer.classList.contains('translate-x-full')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                drawer.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // --- 7. Checkout Logic ---
+        function openCheckout() {
+            toggleCart();
+            const modal = document.getElementById('checkoutModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+            toggleAddressField(); // Initialize address visibility
+        }
+
+        function closeCheckout() {
+            const modal = document.getElementById('checkoutModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+
+        function toggleAddressField() {
+            const type = document.querySelector('input[name="orderType"]:checked').value;
+            const addrContainer = document.getElementById('addressContainer');
+            const addrInput = document.getElementById('custAddress');
+            
+            if (type === 'Home Delivery') {
+                addrContainer.style.display = 'block';
+                addrInput.required = true;
+            } else {
+                addrContainer.style.display = 'none';
+                addrInput.required = false;
+            }
+        }
+
+        function submitWhatsAppOrder(e) {
+            e.preventDefault();
+            
+            const type = document.querySelector('input[name="orderType"]:checked').value;
+            const name = document.getElementById('custName').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const notes = document.getElementById('custNotes').value.trim();
+            
+            let total = 0;
+            let itemsText = cart.map((item, idx) => {
+                total += item.price * item.qty;
+                return `${idx + 1}. ${item.name} ${item.variant ? `(${item.variant})` : ''} - ${item.qty}x = Rs. ${item.price * item.qty}`;
+            }).join('\n');
+
+            let message = `🔥 *SIZZLE BITES - NEW ORDER* 🔥\n\n`;
+            message += `*Customer:* ${name}\n`;
+            message += `*Type:* ${type}\n`;
+            if (type === 'Home Delivery') {
+                message += `*Address:* ${address}\n`;
+            }
+            if (notes) {
+                message += `*Notes:* ${notes}\n`;
+            }
+            message += `\n*Order Details:*\n${itemsText}\n`;
+            message += `\n*TOTAL AMOUNT: Rs. ${total}*\n`;
+            message += `\nPlease confirm my order.`;
+
+            // WhatsApp link encoding (using primary number)
+            const whatsappNumber = '923457482983'; 
+            const encodedMessage = encodeURIComponent(message);
+            const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            window.open(url, '_blank');
+            closeCheckout();
+            
+            // Optional: clear cart after sending
+            // cart = []; updateCartUI();
+        }
+
+        // --- 8. Theme Toggle ---
+        function initTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            // Check local storage or system preference
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                html.classList.remove('dark');
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                icon.classList.replace('fa-sun', 'fa-moon');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+    </script>
+</body>
+</html>

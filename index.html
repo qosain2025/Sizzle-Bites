@@ -273,44 +273,44 @@
     </div>
 
     <script>
-        // --- 1. Data Structure (Updated Prices +20%) ---
+        // --- 1. Data Structure (Original Rates) ---
         const menuData = [
             {
                 category: "Special Deals",
                 icon: "fa-fire",
                 items: [
-                    { id: 'd1', name: "1 Person Deal", desc: "Zinger Burger, Fries, 300ml Drink", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", price: 720 },
-                    { id: 'd2', name: "Kids Meal", desc: "Chicken Burger, Fries + Nuggets, 1 Juice", image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=500&q=80", price: 719 },
-                    { id: 'd3', name: "2 Person Deal", desc: "2 Zinger Burgers, 2 Fries, 300ml Drink", image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", price: 1439 },
-                    { id: 'd4', name: "Hot Deal", desc: "Small Pizza, Maxicano Hot Burger, 300ml Drink", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80", price: 1199 },
-                    { id: 'd5', name: "Birthday Deal", desc: "Large Pizza, 2 Medium Pizza, 12pcs Wings, 2 Large Fries, 2ltr Drink", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80", price: 6600 }
+                    { id: 'd1', name: "1 Person Deal", desc: "Zinger Burger, Fries, 300ml Drink", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", price: 600 },
+                    { id: 'd2', name: "Kids Meal", desc: "Chicken Burger, Fries + Nuggets, 1 Juice", image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=500&q=80", price: 599 },
+                    { id: 'd3', name: "2 Person Deal", desc: "2 Zinger Burgers, 2 Fries, 300ml Drink", image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80", price: 1199 },
+                    { id: 'd4', name: "Hot Deal", desc: "Small Pizza, Maxicano Hot Burger, 300ml Drink", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80", price: 999 },
+                    { id: 'd5', name: "Birthday Deal", desc: "Large Pizza, 2 Medium Pizza, 12pcs Wings, 2 Large Fries, 2ltr Drink", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80", price: 5500 }
                 ]
             },
             {
                 category: "Pizzas",
                 icon: "fa-pizza-slice",
                 items: [
-                    { id: 'p1', name: "Sizzle Special Pizza", desc: "Special marinated chicken, mushrooms, olives, bell peppers, extra cheese.", image: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 779, 'Medium': 1439, 'Large': 2039, 'XL': 2759 } },
-                    { id: 'p2', name: "Chicken Tikka Pizza", desc: "Spicy chicken tikka chunks with onions and green peppers.", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 719, 'Medium': 1319, 'Large': 1859, 'XL': 2460 } },
-                    { id: 'p3', name: "Margherita Pizza", desc: "Classic rich tomato sauce, premium mozzarella, and herbs.", image: "https://images.unsplash.com/photo-1571407971119-f0b1a03f46f4?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 600, 'Medium': 1199, 'Large': 1679, 'XL': 2159 } }
+                    { id: 'p1', name: "Sizzle Special Pizza", desc: "Special marinated chicken, mushrooms, olives, bell peppers, extra cheese.", image: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 649, 'Medium': 1199, 'Large': 1699, 'XL': 2299 } },
+                    { id: 'p2', name: "Chicken Tikka Pizza", desc: "Spicy chicken tikka chunks with onions and green peppers.", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 599, 'Medium': 1099, 'Large': 1549, 'XL': 2050 } },
+                    { id: 'p3', name: "Margherita Pizza", desc: "Classic rich tomato sauce, premium mozzarella, and herbs.", image: "https://images.unsplash.com/photo-1571407971119-f0b1a03f46f4?auto=format&fit=crop&w=500&q=80", variants: { 'Small': 500, 'Medium': 999, 'Large': 1399, 'XL': 1799 } }
                 ]
             },
             {
                 category: "Burgers",
                 icon: "fa-hamburger",
                 items: [
-                    { id: 'b1', name: "Zinger Burger", desc: "Crispy fried chicken breast, fresh lettuce, and signature mayo.", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 540, 'Meal (+Fries & Drink)': 780 } },
-                    { id: 'b2', name: "Double Decker", desc: "Double patty, melting cheese, special sauce.", image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 719, 'Meal (+Fries & Drink)': 959 } },
-                    { id: 'b3', name: "Grilled Burger", desc: "Flame-grilled succulent chicken with BBQ glaze.", image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 599, 'Meal (+Fries & Drink)': 839 } }
+                    { id: 'b1', name: "Zinger Burger", desc: "Crispy fried chicken breast, fresh lettuce, and signature mayo.", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 450, 'Meal (+Fries & Drink)': 650 } },
+                    { id: 'b2', name: "Double Decker", desc: "Double patty, melting cheese, special sauce.", image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 599, 'Meal (+Fries & Drink)': 799 } },
+                    { id: 'b3', name: "Grilled Burger", desc: "Flame-grilled succulent chicken with BBQ glaze.", image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=500&q=80", variants: { 'Single': 499, 'Meal (+Fries & Drink)': 699 } }
                 ]
             },
             {
                 category: "Wraps & Sides",
                 icon: "fa-drumstick-bite",
                 items: [
-                    { id: 'w1', name: "Crispy Wrap", desc: "Crispy chicken strips, lettuce, and mayo wrapped in a soft tortilla.", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=80", price: 479 },
-                    { id: 's1', name: "Loaded Fries", desc: "Golden fries topped with chicken chunks, cheese, and spicy mayo.", image: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?auto=format&fit=crop&w=500&q=80", price: 719 },
-                    { id: 's2', name: "Fried Wings (6 Pcs)", desc: "Crispy, golden, and juicy fried chicken wings.", image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=500&q=80", price: 540 }
+                    { id: 'w1', name: "Crispy Wrap", desc: "Crispy chicken strips, lettuce, and mayo wrapped in a soft tortilla.", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=80", price: 399 },
+                    { id: 's1', name: "Loaded Fries", desc: "Golden fries topped with chicken chunks, cheese, and spicy mayo.", image: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?auto=format&fit=crop&w=500&q=80", price: 599 },
+                    { id: 's2', name: "Fried Wings (6 Pcs)", desc: "Crispy, golden, and juicy fried chicken wings.", image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=500&q=80", price: 450 }
                 ]
             }
         ];
